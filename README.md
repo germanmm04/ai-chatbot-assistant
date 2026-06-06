@@ -84,19 +84,11 @@ Chatbot/
 
 ## Screenshots
 
-> Add your own screenshots to an `images/` folder before publishing.
 
 ### Web Chat Interface
 
-![Web Chat Interface](images/web_chat.jpg)
-
-### CLI Interactive Mode
-
-![CLI Chat](images/cli_chat.jpg)
-
-### Batch Evaluation Output
-
-![Evaluation Results](images/evaluation_results.jpg)
+![Chat interface and test](images/test.jpg)
+![[Chat interface and test](images/cli_chat.jpg)
 
 ---
 
