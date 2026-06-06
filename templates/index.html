@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chatbot RAG</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      font-family: Arial, sans-serif;
+    }
+    body {
+      margin: 0;
+      background: #f3f4f6;
+      color: #111827;
+    }
+    .container {
+      max-width: 850px;
+      margin: 24px auto;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+    .header {
+      padding: 16px 20px;
+      background: #1f2937;
+      color: #ffffff;
+      font-size: 20px;
+      font-weight: 700;
+    }
+    .chat {
+      height: 500px;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .msg {
+      max-width: 85%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      line-height: 1.45;
+      white-space: pre-wrap;
+    }
+    .user {
+      align-self: flex-end;
+      background: #2563eb;
+      color: #ffffff;
+    }
+    .bot {
+      align-self: flex-start;
+      background: #e5e7eb;
+      color: #111827;
+    }
+    .sources {
+      display: block;
+      margin-top: 8px;
+      font-size: 12px;
+      opacity: 0.8;
+    }
+    .input-row {
+      border-top: 1px solid #e5e7eb;
+      padding: 12px;
+      display: flex;
+      gap: 8px;
+    }
+    textarea {
+      flex: 1;
+      resize: none;
+      height: 48px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 14px;
+      font-family: inherit;
+    }
+    button {
+      border: none;
+      border-radius: 8px;
+      padding: 0 16px;
+      background: #1d4ed8;
+      color: white;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">Chatbot</div>
+    <div id="chat" class="chat"></div>
+    <form id="chat-form" class="input-row">
+      <textarea id="question" placeholder="Escribe tu pregunta..." required></textarea>
+      <button id="send-btn" type="submit">Enviar</button>
+    </form>
+  </div>
+
+  <script>
+    const chat = document.getElementById("chat");
+    const form = document.getElementById("chat-form");
+    const questionInput = document.getElementById("question");
+    const sendBtn = document.getElementById("send-btn");
+
+    function addMessage(text, role, sources = []) {
+      const wrapper = document.createElement("div");
+      wrapper.className = `msg ${role}`;
+      wrapper.textContent = text;
+
+      if (role === "bot" && sources.length > 0) {
+        const sourceNode = document.createElement("span");
+        sourceNode.className = "sources";
+        sourceNode.textContent = `Fuentes: ${sources.join(", ")}`;
+        wrapper.appendChild(sourceNode);
+      }
+
+      chat.appendChild(wrapper);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    addMessage(
+      "Hola. Soy tu chatbot documental. Haz una pregunta sobre tus documentos.",
+      "bot"
+    );
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const question = questionInput.value.trim();
+      if (!question) return;
+
+      addMessage(question, "user");
+      questionInput.value = "";
+      sendBtn.disabled = true;
+
+      try {
+        const response = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ question }),
+        });
+        const data = await response.json();
+
+        if (!response.ok) {
+          addMessage(data.error || "Error al procesar la pregunta.", "bot");
+        } else {
+          addMessage(data.answer, "bot", data.sources || []);
+        }
+      } catch (error) {
+        addMessage("No se pudo conectar con el servidor.", "bot");
+      } finally {
+        sendBtn.disabled = false;
+        questionInput.focus();
+      }
+    });
+  </script>
+</body>
+</html>
