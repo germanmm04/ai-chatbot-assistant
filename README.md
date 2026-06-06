@@ -88,7 +88,8 @@ Chatbot/
 ### Web Chat Interface
 
 ![Chat interface and test](images/test.jpg)
-![[Chat interface and test](images/cli_chat.jpg)
+
+![[Chat interface and test](images/test2.jpg)
 
 ---
 
