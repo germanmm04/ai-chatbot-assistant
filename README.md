@@ -62,11 +62,6 @@ The project includes both a **CLI chat mode** and a **Flask web interface**, plu
   * Cross-document integration
 * Batch mode exports results to a Markdown table with prompts, answers, and sources
 
-Example evaluation run:
-
-```bash
-python chatbot_rag.py --prompts-file prompts_10_evaluacion.txt --prompts-output resultados_prompts.md
-```
 
 ---
 
@@ -81,8 +76,6 @@ Chatbot/
 ├── data/
 │   ├── docs/                   # User documents (not included in repo)
 │   └── faiss_index/            # Generated vector index
-├── prompts_10_evaluacion.txt   # Sample evaluation prompts
-├── prompts_evaluacion.md       # Evaluation guidelines
 ├── requirements.txt
 └── README.md
 ```
