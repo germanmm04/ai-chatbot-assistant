@@ -89,6 +89,8 @@ Chatbot/
 
 ![Chat interface and test](images/test.jpg)
 
+---
+
 ![[Chat interface and test](images/test2.jpg)
 
 ---
